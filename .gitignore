@@ -1,0 +1,5 @@
+*.pyc
+.DS_Store
+edgar/
+env/
+requests_cache.sqlite
