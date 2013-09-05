@@ -1,0 +1,6 @@
+PIL==1.1.7
+Theano==0.6.0rc3
+nose==1.3.0
+numpy==1.7.1
+scipy==0.12.0
+wsgiref==0.1.2
