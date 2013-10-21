@@ -1,6 +1,20 @@
-from fabric.api import sudo, local, run, cd, env, abort, settings, hide, lcd
+from fabric.api import local, run, cd, env, abort, settings, hide, lcd
 
-env.hosts = ['rcurrie@www.ampdat.com']
+env.hosts = ["rcurrie@www.ampdat.com"]
+
+
+def install_local():
+    "Install required python packages in virtual env"
+    local('source env/bin/activate && pip install -r requirements.txt')
+
+
+def update_edgar_local():
+    "Update parsed edgar files listed in default.csv"
+    local("source env/bin/activate && python edgar.py")
+
+
+def sync():
+    local("rsync -avz --exclude 'env' -e ssh * %s:swan" % env.host)
 
 
 def check():
@@ -20,8 +34,9 @@ def check():
         abort('Repository has uncommitted changes.')
 
 
-def update_cloud():
+def update_server():
     """ Update the server files """
     # run('cd swan;')
     with cd('~/swan'):
         run('git pull')
+        run('source env/bin/activate && pip install -r requirements.txt')
