@@ -8,6 +8,12 @@ def install_local():
     local('source env/bin/activate && pip install -r requirements.txt')
 
 
+def upgrade():
+    """ Update all python packages with pip and update requirements """
+    local("pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U")
+    local("pip freeze > requirements.txt")
+
+
 def update_edgar_local():
     "Update parsed edgar files listed in default.csv"
     local("source env/bin/activate && python edgar.py")
