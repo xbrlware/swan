@@ -4,8 +4,6 @@ import re
 import logging
 
 
-print "Hello Hey"
-
 class XBRL:
     def __init__(self, XBRLInstanceLocation='/home/luke/research/sec/pysec/data/30305/dco-20121231.xml'):
 
@@ -30,7 +28,7 @@ class XBRL:
             FundamentantalAccountingConcepts(self)
             return True
         else:
-            logger.warning(currentEnd, ' is not a date')
+            Logger.warning(currentEnd, ' is not a date')
             return False
 
     def getNodeList(self, xpath, root=None):
@@ -71,7 +69,7 @@ class XBRL:
             try:
                 factValue = float(factValue)
             except:
-                logger.warning('couldnt convert %s=%s to string' % (SeekConcept, factValue))
+                Logger.warning('couldnt convert %s=%s to string' % (SeekConcept, factValue))
                 factValue = None
                 pass
 

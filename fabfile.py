@@ -1,6 +1,6 @@
 from fabric.api import local, run, cd, env, abort, settings, hide, lcd
 
-env.hosts = ["rcurrie@www.ampdat.com"]
+# env.hosts = ["rcurrie@www.ampdat.com"]
 
 
 def install_local():
@@ -15,12 +15,25 @@ def upgrade():
 
 
 def update_edgar_local():
-    "Update parsed edgar files listed in default.csv"
+    """ Update parsed edgar files listed in default.csv """
     local("source env/bin/activate && python edgar.py")
 
 
+def install():
+    """ Install packages required for Theano machine learning library
+    see http://deeplearning.net/software/theano/install_ubuntu.html#install-ubuntu """
+    local("sudo apt-get install python-numpy python-scipy python-dev python-pip python-nose g++ libopenblas-dev git")
+
+
+def update_edgar_remote():
+    """ Download edgar files listed in sp500.csv on remote server """
+    with cd('~/swan'):
+        run("source env/bin/activate && python edgar.py -csv sp500.csv")
+
+
 def sync():
-    local("rsync -avz --exclude 'env' -e ssh * %s:swan" % env.host)
+    """ Directly sync local folder to host's swan folder """
+    local("rsync -avz --exclude 'env' --exclude 'data' -e ssh * %s:swan" % env.host)
 
 
 def check():
@@ -42,7 +55,5 @@ def check():
 
 def update_server():
     """ Update the server files """
-    # run('cd swan;')
     with cd('~/swan'):
-        run('git pull')
         run('source env/bin/activate && pip install -r requirements.txt')

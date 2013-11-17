@@ -29,17 +29,17 @@ def get_all_xbrl_urls(ticker, type="10"):
 
 
 def download_all_xbrl_docs(ticker, type="10"):
-    if not os.path.exists("edgar/{0}".format(ticker)):
-        os.makedirs("edgar/{0}".format(ticker))
+    if not os.path.exists("data/edgar/{0}".format(ticker)):
+        os.makedirs("data/edgar/{0}".format(ticker))
     links = get_all_xbrl_urls(ticker)
     xbrl_files = []
     for xbrl_url in links:
         filename = xbrl_url.split('/')[-1]
-        xbrl_files.append("edgar/{0}/{1}".format(ticker, filename))
-        if not os.path.isfile("edgar/{0}/{1}".format(ticker, filename)):
+        xbrl_files.append("data/edgar/{0}/{1}".format(ticker, filename))
+        if not os.path.isfile("data/edgar/{0}/{1}".format(ticker, filename)):
             print "Storing", filename
             r = requests.get(xbrl_url)
-            with open("edgar/{0}/{1}".format(ticker, filename), 'w') as f:
+            with open("data/edgar/{0}/{1}".format(ticker, filename), 'w') as f:
                 f.write(r.text)
     return xbrl_files
 
@@ -47,13 +47,13 @@ def download_all_xbrl_docs(ticker, type="10"):
 def parse_all_xbrl_docs(ticker):
     """ Parses all xbrl docs downloaded for the given ticker and returns an array
     of hashes each of which contains all the facts extracted from a given file """
-    dir = "edgar/{0}".format(ticker)
+    dir = "data/edgar/{0}".format(ticker)
     xbrl_files = [f for f in os.listdir(dir) if os.path.isfile(os.path.join(dir, f))]
     all_xbrl = []
     for f in xbrl_files:
         print "Parsing", f
         try:
-            x = xbrl.XBRL("edgar/{0}/{1}".format(ticker, f))
+            x = xbrl.XBRL("data/edgar/{0}/{1}".format(ticker, f))
             # print f, "==========> Fields:", x.fields
             all_xbrl.append(x.fields)
         except:
@@ -62,27 +62,22 @@ def parse_all_xbrl_docs(ticker):
     return all_xbrl
 
 if __name__ == '__main__':
-    requests_cache.install_cache('requests_cache')
+    requests_cache.install_cache('data/requests_cache')
 
     parser = argparse.ArgumentParser(
-        description="Pull from edgar the 10q and 10k reports from the S&P500 and extract financial data.")
+        description="Download from edgar the 10q and 10k xbrl reports and extract financial data.")
     parser.add_argument('-c', '--csv', dest="csv", action="store", default="default.csv",
                         help='csv file with list of company names and tickers to download xbrl data for')
     args = parser.parse_args()
 
     reader = csv.reader(open(args.csv, "rU"), delimiter=',', quoting=csv.QUOTE_ALL)
     companies = {row[1]: {"name": row[0]} for row in reader}
-    print companies
 
-    for ticker, filings in companies.iteritems():
+    for ticker, filings in sorted(companies.iteritems()):
         print "Downloading filings for {0}".format(ticker)
         download_all_xbrl_docs(ticker)
         all_xbrl_facts = parse_all_xbrl_docs(ticker)
-
-    # links = get_all_xbrl_urls("0001288776")
-    # xbrl_files = download_all_xbrl_docs("0001288776")
-    # xbrl_files = download_all_xbrl_docs("AAPL")
-
+        # print all_xbrl_facts
 
     # print "Revenues", x.fields['Revenues']
     # print "OperatingIncomeLoss", x.fields['OperatingIncomeLoss']
