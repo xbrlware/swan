@@ -1,4 +1,5 @@
 backports.ssl-match-hostname==3.4.0.2
+beautifulsoup4==4.3.2
 certifi==2015.4.28
 cffi==1.0.1
 characteristic==14.3.0
@@ -7,8 +8,10 @@ cssselect==0.9.1
 Cython==0.22
 docopt==0.6.2
 enum34==1.0.4
+finsymbols==1.0.0
 gnureadline==6.3.3
 h5py==2.5.0
+html5lib==0.99999
 idna==2.0
 ipaddress==1.0.7
 ipython==3.1.0
@@ -19,11 +22,14 @@ lxml==3.4.4
 MarkupSafe==0.23
 mistune==0.5.1
 numpy==1.9.2
+pandas==0.16.1
 pyasn1==0.1.7
 pyasn1-modules==0.0.5
 pycparser==2.13
 Pygments==2.0.2
 pyOpenSSL==0.15.1
+python-dateutil==2.4.2
+pytz==2015.4
 pyzmq==14.6.0
 queuelib==1.2.2
 scipy==0.15.1
