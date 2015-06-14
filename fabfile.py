@@ -6,6 +6,11 @@ from fabric.context_managers import shell_env
 pythonpath = os.getenv("PYTHONPATH", "") + "../../../lib/caffe/distribute/python"
 
 
+def run_notebook():
+    local("THEANO_FLAGS=mode=FAST_RUN,device=gpu,floatX=float32"
+          " ipython notebook")
+
+
 def sync_data_from_getz():
     """ rsync the relevant data directories from getz """
     local("rsync -avz -e ssh"
