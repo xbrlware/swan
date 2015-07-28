@@ -19,6 +19,7 @@ ipaddress==1.0.7
 ipython==3.1.0
 Jinja2==2.7.3
 jsonschema==2.4.0
+Keras==0.1.1
 leveldb==0.193
 lxml==3.4.4
 MarkupSafe==0.23
