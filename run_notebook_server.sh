@@ -8,7 +8,9 @@
 # ipython notebook --ip='*' --script --no-browser --port 8888
 
 
-PYTHONPATH=$PYTHONPATH:./keras/ THEANO_FLAGS='floatX=float32,device=gpu,exception_verbosity=high,optimizer=fast_compile' ipython notebook --port 8192
+PYTHONPATH=$PYTHONPATH:./keras/ \
+  THEANO_FLAGS='floatX=float32,device=gpu,exception_verbosity=high,optimizer=fast_compile' \
+  ipython notebook --ip='*' --no-browser --port 8192
 
 # THEANO_FLAGS=optimizer=fast_compile,mode=FAST_RUN,device=gpu,floatX=float32 ipython notebook --port 8192
 # optimizer=None

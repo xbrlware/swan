@@ -1,9 +1,4 @@
-import os
 from fabric.api import local, lcd
-from fabric.context_managers import shell_env
-
-# Add caffe to python path so we can access deep learning library
-pythonpath = os.getenv("PYTHONPATH", "") + "../../../lib/caffe/distribute/python"
 
 
 def run_notebook():
@@ -20,8 +15,7 @@ def sync_data_from_getz():
 
 def run_web_server():
     """ Startup instrument detection web server in debug mode """
-    with shell_env(PYTHONPATH=pythonpath):
-        local("env/bin/activate && python server.py")
+    local("env/bin/activate && python server.py")
 
 
 def update_dev_server():
@@ -40,8 +34,7 @@ def run_uwsgi():
 
 def run_cluster():
     """ Startup ipython compute cluster """
-    with shell_env(PYTHONPATH=pythonpath):
-        local("source env/bin/activate; ipcluster start -n 8")
+    local("source env/bin/activate; ipcluster start -n 8")
 
 
 def watch():
@@ -55,17 +48,6 @@ def test():
 
 def update_all_pip():
     local("pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U")
-
-
-def update_caffe():
-    with lcd("../../../lib/caffe/"):
-        local("git pull")
-        local("pip install -r python/requirements.txt")
-        local("make clean")
-        local("make test")
-        local("make runtest")
-        local("make pycaffe")
-        local("make distribute")
 
 
 def train_quick():
